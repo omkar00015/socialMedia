@@ -1,12 +1,17 @@
 const { default: axios } = require("axios");
 
-//created axio client to create endpoint
-const axioClient=axios.create({
-    baseURL:'http://localhost:8000'
+//created axios client to create endpoint
+const axioClient = axios.create({
+  baseURL: "http://localhost:8000",
 });
 
-const createUser = (data) => axioClient.post('/user', data);
+const createUser = (data) => axioClient.post("/user", data);
+const getUserByEmail = (email) => axioClient.get("/user/"+email);
 
-export default{
-    createUser
-}
+const createPost = (data) => axioClient.post('/post', data);
+
+export default {
+  createUser,
+  getUserByEmail,
+  createPost
+};

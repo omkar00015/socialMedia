@@ -1,10 +1,29 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import SideNav from './_components/SideNav'
 import Header from './_components/Header'
+import GlobalApi from '../_utils/GlobalApi';
+import { useUser } from '@clerk/nextjs';
+import { UserDetailContext } from '../_context/UserDetailContext';
 
 function layout({ children }) {
-  const [toggleSideBar, setToggleSideBar] = useState(true)
+  const [toggleSideBar, setToggleSideBar] = useState(true);
+  const {user} = useUser();
+  const { userDetail, setUserDetail} = useContext(UserDetailContext);
+
+  const getUserDetails = () => {
+    GlobalApi.getUserByEmail(user.primaryEmailAddress.emailAddress).then(resp => {
+      console.log(resp);
+      setUserDetail(resp.data);
+    })
+  };
+
+  useEffect(() => {
+    if(user) {
+      getUserDetails();
+    }
+  },[user]);
+
   return (
     <div>
 

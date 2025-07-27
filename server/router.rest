@@ -24,3 +24,6 @@ Content-Type: application/json
     "createdBy": "68848d937928a391103babdc",
     "imageUrl": "Sample-url"
 }
+
+###
+GET http://localhost:8000/user/00015omkar@gmail.com
