@@ -10,3 +10,17 @@ Content-Type: application/json
     "email": "test@gmail.com",
     "image": "Test image"
 }
+
+###
+GET http://localhost:8000/post
+
+###
+POST http://localhost:8000/post
+Content-Type: application/json
+
+{
+    "postText": "Sample Post Message",
+    "createdAt": "343431",
+    "createdBy": "68848d937928a391103babdc",
+    "imageUrl": "Sample-url"
+}
