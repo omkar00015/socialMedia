@@ -6,9 +6,9 @@ POST  http://localhost:8000/user
 Content-Type: application/json
 
 {
-    "name": "Test User",
-    "email": "test@gmail.com",
-    "image": "Test image"
+    "name": "Omkar Paschapur",
+    "email": "00015omkar@gmail.com",
+    "image": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18zMDhSZnYxUXRyc0x1ajUxclJWQVlVcUJSdHMifQ"
 }
 
 ###

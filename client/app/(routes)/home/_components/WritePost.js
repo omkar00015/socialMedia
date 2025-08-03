@@ -4,7 +4,8 @@ import { globalLabels } from "@/app/_utils/GlobalLabels";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
 import { Image, Send, Video } from "lucide-react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 function WritePost() {
   const { user } = useUser();
@@ -16,11 +17,25 @@ function WritePost() {
       postText: userInputPost,
       createdAt: Date.now().toString(),
       createdBy: userDetail._id,
+      imageUrl: userDetail.image
     };
     GlobalApi.createPost(data).then((resp) => {
-      console.log(resp);
+      setUserInputPost('');
+      if (resp) {
+        toast.success( "Awesome !!!", {
+          description: 'Your Post Published Successfully',
+        })
+      }
+    }, (error) => {
+        toast.error("Something went wrong")
     });
   };
+
+  useEffect(() => {
+    if(UserDetailContext) {
+      setUserDetail(UserDetailContext);
+    }
+  },[UserDetailContext]);
 
   return (
     <div>
@@ -35,6 +50,7 @@ function WritePost() {
             placeholder={globalLabels.postLabels.whatsNew}
             className="outline-none w-full"
             onChange={(e) => setUserInputPost(e.target.value)}
+            value={userInputPost}
           />
         </div>
         <div className="mt-2 flex justify-between">

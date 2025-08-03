@@ -15,8 +15,8 @@ export default function Home() {
         image: user.imageUrl,
       };
       GlobalApi.createUser(data).then((resp) => {
-        console.log(resp.data);
         localStorage.setItem("isLogin", true);
+        console.log(resp.data);
       });
     }
   };

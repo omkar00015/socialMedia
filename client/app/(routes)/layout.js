@@ -13,7 +13,6 @@ function layout({ children }) {
 
   const getUserDetails = () => {
     GlobalApi.getUserByEmail(user.primaryEmailAddress.emailAddress).then(resp => {
-      console.log(resp);
       setUserDetail(resp.data);
     })
   };
