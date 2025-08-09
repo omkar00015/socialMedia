@@ -3,28 +3,59 @@ const Post = require("../models/Post");
 
 const router = express.Router();
 
-//Get All Post 
+//Get All Post
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find().populate('createdBy').sort({createdAt: -1});
+    const posts = await Post.find()
+      .populate("createdBy")
+      .sort({ createdAt: -1 });
     res.json(posts);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-//Create post 
+//Create post
 router.post("/", async (req, res) => {
   try {
     const data = {
       postText: req.body.postText,
       createdAt: req.body.createdAt,
       createdBy: req.body.createdBy,
-      imageUrl: req.body.imageUrl
+      imageUrl: req.body.imageUrl,
     };
 
     const postResult = await Post.create(data);
     res.status(201).json(postResult);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//Like/Dislike Post
+
+router.put("/like/:postId", async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const data = {
+      userId: req.body.userId,
+      isLike: req.body.isLike
+    }
+    const post = await Post.findById(postId);
+    if(!post.likes) {
+      const updatePost = await Post.findByIdAndUpdate(postId,{likes:[]},
+       { upsert: true,
+        runValidators: true
+       }
+      );
+      await updatePost.save();
+    }
+    const updatedPost = await Post.findById(postId);
+    data.isLike 
+    ? updatedPost.likes.push(data.userId)
+    : updatedPost.likes.pop(data.userId);
+    const result = await updatedPost.save();
+    res.status(201).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

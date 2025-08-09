@@ -7,7 +7,7 @@ import { Image, Send, Video } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-function WritePost() {
+function WritePost({getAllPost}) {
   const { user } = useUser();
   const [userInputPost, setUserInputPost] = useState();
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
@@ -22,6 +22,7 @@ function WritePost() {
     GlobalApi.createPost(data).then((resp) => {
       setUserInputPost('');
       if (resp) {
+        getAllPost();
         toast.success( "Awesome !!!", {
           description: 'Your Post Published Successfully',
         })

@@ -12,7 +12,8 @@ const postSchema = new mongoose.Schema({
     createdBy:{
         type:mongoose.Schema.Types.ObjectId, ref:'user',
         require:true
-    }
+    },
+    likes:[{type: mongoose.Schema.Types.ObjectId, ref:'user'}]
 })
 
 module.exports=mongoose.model('post', postSchema)

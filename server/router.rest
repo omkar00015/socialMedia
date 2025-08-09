@@ -27,3 +27,12 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8000/user/00015omkar@gmail.com
+
+###
+PUT http://localhost:8000/post/like/688f69f9ebbf43abe3233fd2
+Content-Type: : application/json
+
+{
+    "userId":"688615677928a391103bad08",
+    "isLike":true
+}
