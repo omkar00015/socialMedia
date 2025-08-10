@@ -6,7 +6,6 @@ import { UserButton, useUser } from "@clerk/nextjs";
 
 export default function Home() {
   const {user} = useUser();
-
   const createUserProfile = () => {
     if (!localStorage.getItem("isLogin")) {
       const data = {

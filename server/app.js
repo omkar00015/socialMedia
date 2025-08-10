@@ -28,6 +28,10 @@ app.use("/user", userRoute, cors());
 const postRoute = require("./routes/postRoute");
 app.use("/post", postRoute, cors());
 
+//Comment Route
+const commentRoue = require("./routes/commentRoute");
+app.use("/comment", commentRoue, cors());
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

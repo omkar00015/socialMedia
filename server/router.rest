@@ -36,3 +36,15 @@ Content-Type: : application/json
     "userId":"688615677928a391103bad08",
     "isLike":true
 }
+
+###
+POST http://localhost:8000/comment
+Content-Type: application/json
+
+{
+    "post": "688f69f9ebbf43abe3233fd2",
+    "createdBy":"688615677928a391103bad08",
+    "commentText": "SampleText",
+    "createdAt": "1234"
+
+}
