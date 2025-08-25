@@ -7,11 +7,21 @@ import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import Comment_List from "./Comment_List";
 
 function PostItem({ post, updatePostList }) {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
-  const {user} = useUser();
-  const [userInputComment, setUserInputComment] = useState('');
+  const { user } = useUser();
+  const [userInputComment, setUserInputComment] = useState("");
   const checkIsUserLike = (postLikes) => {
     return postLikes.find((item) => item?._id == userDetail?._id);
   };
@@ -19,29 +29,31 @@ function PostItem({ post, updatePostList }) {
   const onLikeClick = (isLike, postId) => {
     const data = {
       userId: userDetail?._id,
-      isLike: isLike
-    }
-    GlobalApi.onPostLike(postId,data).then(resp => {
+      isLike: isLike,
+    };
+    GlobalApi.onPostLike(postId, data).then((resp) => {
       console.log(resp);
       updatePostList();
-    })
-    setUserInputComment('');
+    });
+    setUserInputComment("");
   };
 
   const addComment = (postId) => {
-    const data= {
+    const data = {
       commentText: userInputComment,
       createdBy: userDetail._id,
       post: postId,
-      createdAt: Date.now().toString()
-    }
-    GlobalApi.addComment(data).then(resp => {
-      if(resp) {
-        toast.success( "Awesome !!!", {
-          description: 'Your Comment Published Successfully',
-        })
+      createdAt: Date.now().toString(),
+    };
+    GlobalApi.addComment(data).then((resp) => {
+      if (resp) {
+        toast.success("Awesome !!!", {
+          description: "Your Comment Published Successfully",
+        });
+        updatePostList();
       }
-    })
+    });
+    setUserInputComment("");
   };
 
   useEffect(() => {
@@ -101,51 +113,65 @@ function PostItem({ post, updatePostList }) {
           )}
           <h2>{post?.likes?.length}</h2>
         </div>
-        <div className="flex gap-1 items-center text-gray-500">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
-            />
-          </svg>
-          <h2>{post.comments?.length}</h2>
-        </div>
+        <AlertDialog>
+          <AlertDialogTrigger>
+            <div className="flex gap-1 items-center text-gray-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+                />
+              </svg>
+              <h2>{post?.comments?.length}</h2>
+            </div>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="flex justify-between items-center">Comments<AlertDialogCancel>x</AlertDialogCancel></AlertDialogTitle>
+              <AlertDialogDescription>
+                <Comment_List commentList={post?.comments} userDetail={userDetail}/>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       {/*Comment Section */}
-      <div className="mt-5">
-        <hr className="mb-5"></hr>
-        <div className="flex gap-4 items-center">
-          <Image
-            src={user?.imageUrl}
-            width={35}
-            height={35}
-            alt="user-image"
-            className="rounded-full"
-          />
-          <input
-            onChange={(e)=>setUserInputComment(e.target.value)}
-            type="text"
-            value={userInputComment}
-            placeholder="Write a Comment"
-            className="w-full bg-slate-100 p-2 rounded-full px-5 outline-blue-300"
-          />
-          <Button 
-            className="bg-blue-400 text-white p-2 h-8 w-10 rounded-xl hover:bg-blue-600 mt-1"
-            disabled={!userInputComment}
-            onClick={() => addComment(post._id)}
+      {user && (
+        <div className="mt-5">
+          <hr className="mb-5"></hr>
+          <div className="flex gap-4 items-center">
+            <Image
+              src={user?.imageUrl}
+              width={35}
+              height={35}
+              alt="user-image"
+              className="rounded-full"
+            />
+            <input
+              onChange={(e) => setUserInputComment(e.target.value)}
+              type="text"
+              value={userInputComment}
+              placeholder="Write a Comment"
+              className="w-full bg-slate-100 p-2 rounded-full px-5 outline-blue-300"
+            />
+            <Button
+              className="bg-blue-400 text-white p-2 h-8 w-10 rounded-xl hover:bg-blue-600 mt-1"
+              disabled={!userInputComment}
+              onClick={() => addComment(post._id)}
             >
-            <Send />
-          </Button>
+              <Send />
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

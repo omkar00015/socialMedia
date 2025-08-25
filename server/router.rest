@@ -48,3 +48,6 @@ Content-Type: application/json
     "createdAt": "1234"
 
 }
+
+### 
+DELETE http://localhost:8000/comment/68a1d6e2c3188cfdd6bdb1c8

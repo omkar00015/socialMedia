@@ -18,7 +18,7 @@ function Home() {
 
   useEffect(() => {
     getAllPost()
-  },[]);
+  },[postList]);
   
   return (
     <div className='p-5 px-10'>

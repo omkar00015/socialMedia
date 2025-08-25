@@ -9,7 +9,13 @@ router.get("/", async (req, res) => {
     const posts = await Post.find()
       .populate("createdBy")
       .populate('likes')
-      .populate('comments')
+      .populate({
+        path: 'comments',
+        populate: {
+            path: 'createdBy',
+            model: 'user'
+        }
+      })
       .sort({ createdAt: -1 });
     res.json(posts);
   } catch (error) {
